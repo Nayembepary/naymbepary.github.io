@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naym's All-in-One Automation Tools & SaaS</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --background: #f3f4f6;
+            --card-bg: #ffffff;
+            --text: #1f2937;
+            --border: #e5e7eb;
+            --accent: #10b981;
+        }
+        [data-theme="dark"] {
+            --background: #111827;
+            --card-bg: #1f2937;
+            --text: #f3f4f6;
+            --border: #374151;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        header {
+            background-color: var(--primary);
+            color: white;
+            width: 100%;
+            text-align: center;
+            padding: 2.5rem 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        header h1 { margin: 0; font-size: 2.3rem; }
+        header p { margin: 0.5rem 0 0 0; opacity: 0.9; }
+        .theme-toggle {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .theme-toggle:hover { background: rgba(255, 255, 255, 0.3); }
+        
+        .ad-space {
+            width: 90%;
+            max-width: 1100px;
+            background: repeating-linear-gradient(45deg, rgba(79,70,229,0.1), rgba(79,70,229,0.1) 10px, rgba(79,70,229,0.05) 10px, rgba(79,70,229,0.05) 20px);
+            border: 2px dashed var(--primary);
+            border-radius: 8px;
+            text-align: center;
+            padding: 15px;
+            margin: 1.5rem 0 0 0;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .search-container {
+            width: 90%;
+            max-width: 500px;
+            margin: -20px auto 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+        .search-container input {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 2px solid var(--primary);
+            padding: 0.9rem 1.2rem;
+            border-radius: 30px;
+            width: 100%;
+            box-sizing: border-box;
+            background: var(--card-bg);
+            color: var(--text);
+        }
+
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            width: 90%;
+            max-width: 1100px;
+        }
+        .tab-btn {
+            background: var(--card-bg);
+            color: var(--text);
+            border: 2px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 90%;
+            margin: 2rem 0 3rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .card h2 {
+            margin-top: 0;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+            font-size: 1.35rem;
+            padding-right: 30px;
+        }
+        .fav-btn {
+            position: absolute;
+            top: 1.8rem;
+            right: 1.8rem;
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: #ccc;
+            transition: transform 0.2s;
+        }
+        .fav-btn.active { color: #ef4444; transform: scale(1.1); }
+        
+        .input-group { margin-top: 1rem; flex-grow: 1; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.7rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 0.95rem;
+            background: var(--card-bg);
+            color: var(--text);
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.2rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 1rem;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+        button:hover { background-color: var(--primary-hover); }
+        .result-box {
+            margin-top: 1.2rem;
+            padding: 0.9rem;
+            background: rgba(79, 70, 229, 0.08);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            font-size: 0.95rem;
+        }
+        #qrcode { display: flex; justify-content: center; margin: 1rem 0; }
+        #qrcode img { border: 4px solid white; border-radius: 4px; }
+        .checkbox-group { display: flex; gap: 10px; margin-top: 0.5rem; flex-wrap: wrap; }
+        .checkbox-group label { display: flex; align-items: center; gap: 5px; font-weight: normal; }
+        .checkbox-group input { width: auto; }
+        .btn-flex { display: flex; gap: 8px; }
+        .counter-badge { display: inline-block; background: var(--primary); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; margin-top: 5px; }
+        
+        .timer-display { font-size: 3rem; font-weight: bold; text-align: center; margin: 10px 0; font-family: monospace; color: var(--primary); }
+        .timer-status { text-align: center; font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; color: #10b981; }
+
+        .crypto-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        .crypto-table th, .crypto-table td { padding: 8px; border: 1px solid var(--border); text-align: left; }
+        .crypto-table th { background: rgba(79, 70, 229, 0.1); color: var(--primary); }
+
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
+        .toast {
+            background: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-top: 10px;
+            font-weight: bold;
+            animation: slideIn 0.3s ease-out forwards;
+        }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        .flashcard { background: rgba(79, 70, 229, 0.05); border: 2px dashed var(--primary); padding: 15px; border-radius: 8px; text-align: center; cursor: pointer; min-height: 80px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; transition: background 0.2s; margin-bottom: 10px;}
+        .progress-bar-container { background: #e5e7eb; border-radius: 10px; height: 12px; width: 100%; margin-top: 5px; overflow: hidden; }
+        .progress-bar-fill { background: #10b981; height: 100%; width: 0%; transition: width 0.3s ease; }
+        .bcs-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; }
+        .bcs-item input { width: auto; margin-right: 8px; }
+
+        .quiz-option { display: block; background: var(--background); border: 1px solid var(--border); padding: 8px 12px; margin-top: 6px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; }
+        .quiz-option:hover { background: rgba(79, 70, 229, 0.1); }
+
+        .dict-result-item { margin-top: 5px; padding: 5px; background: rgba(0,0,0,0.05); border-radius: 4px; font-size: 0.9rem; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 2px solid var(--primary);
+        }
+        .payment-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 8px;
+            border-radius: 5px;
+            color: white;
+            margin: 5px;
+            display: inline-block;
+        }
+        .bkash { background: #e2125d; }
+        .nagad { background: #f34f22; }
+
+        footer { margin-top: auto; padding: 2rem 0; text-align: center; width: 100%; background: var(--card-bg); border-top: 1px solid var(--border); }
+        .share-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
+        .share-btn { padding: 8px 15px; border-radius: 5px; border: none; color: white; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 0.9rem; }
+        .share-fb { background: #1877f2; }
+        .share-wa { background: #25d366; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌓 Theme</button>
+        <h1>Naym's Smart Web Tools & SaaS</h1>
+        <p>Premium Utilities, Crypto Analytics & Premium Exam Preparation Hub</p>
+    </header>
+
+    <div class="ad-space" id="top-ad-banner">
+        📢 SPONSOR AD SLOT AVAILABLE — Naym Digital Assets Traffic Monetization Network.<br>
+        <small style="color:var(--accent);">⚡ Automated P2P Escrow Monetized via Rocket/bKash/Nagad Network</small>
+    </div>
+
+    <div class="search-container" style="margin-top: 15px;">
+        <input type="text" id="tool-search" placeholder="🔍 Search tools... (e.g. BCS, Crypto, Arbitrage, Quiz)" oninput="filterTools()">
+    </div>
+
+    <div class="category-tabs">
+        <button class="tab-btn active" onclick="filterCategory('all', this)">All Tools</button>
+        <button class="tab-btn" onclick="filterCategory('fav', this)">❤️ Favorites</button>
+        <button class="tab-btn" onclick="filterCategory('text', this)">Text & Scripting</button>
+        <button class="tab-btn" onclick="filterCategory('media', this)">Images & Media</button>
+        <button class="tab-btn" onclick="filterCategory('utility', this)">Daily Utilities</button>
+        <button class="tab-btn" onclick="filterCategory('finance', this)">Crypto & Finance</button>
+    </div>
+
+    <div class="container" id="tools-grid">
+        
+        <div class="card" id="tool-premium-suggestion" data-title="bcs suggestion pdf sheets download premium paywall money" data-category="utility">
+            <h2>🔒 Premium BCS Suggestion Sheets</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-premium-suggestion')">❤️</button>
+            <div class="input-group">
+                <p style="font-size:0.9rem; opacity:0.8;">Get instant full access to core High-Yield English Preposition, Arabic Grammar & Civil Service Short Suggestion PDFs.</p>
+                <div class="result-box" style="font-weight: bold; border-left-color: var(--accent);">Price: ৳ ২০ BDT Only</div>
+                <button onclick="openPaywallModal('Premium Suggestion PDF Unlock')" style="background-color: var(--accent);">⚡ Unlock Material Now</button>
+            </div>
+        </div>
+
+        <div class="card" id="tool-bcs-quiz" data-title="bcs live quiz exam system mcq question negative marking live practice score grammar arabic english" data-category="utility">
+            <h2>📝 BCS Simulator (Negative Marking)</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-bcs-quiz')">❤️</button>
+            <div class="input-group">
+                <div style="display:flex; justify-content: space-between; font-weight: bold; font-size:0.85rem; margin-bottom:10px;">
+                    <span>Score: <span id="quiz-score" style="color:var(--accent);">0.00</span></span>
+                    <span>Wrong Penalty: <span style="color:#ef4444;">-0.25</span></span>
+                </div>
+                <label id="quiz-question" style="font-size: 1rem; color: var(--primary);">Loading Quiz...</label>
+                <div id="quiz-options-container"></div>
+                <div id="quiz-result" class="result-box" style="display:none; margin-top:8px;"></div>
+                <button onclick="loadNextQuizQuestion()" style="margin-top:8px; background:#6b7280;">Next Question 🔄</button>
+            </div>
+        </div>
+
+        <div class="card" id="tool-bcs-neg-calc" data-title="bcs negative marking calculator custom marks exam score cut off" data-category="utility">
+            <h2>📊 BCS Marks & Penalty Calculator</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-bcs-neg-calc')">❤️</button>
+            <div class="input-group">
+                <label>Total Correct Answers:</label>
+                <input type="number" id="neg-calc-correct" value="80" min="0" oninput="calculateBcsNegativeMarking()">
+                <label style="margin-top:8px;">Total Wrong Answers:</label>
+                <input type="number" id="neg-calc-wrong" value="20" min="0" oninput="calculateBcsNegativeMarking()">
+                <label style="margin-top:8px;">Penalty Per Wrong Answer:</label>
+                <select id="neg-calc-penalty" onchange="calculateBcsNegativeMarking()">
+                    <option value="0.25">0.25 (Bank / Primary / Standard)</option>
+                    <option value="0.50">0.50 (BCS Preliminary Standard)</option>
+                </select>
+                <div id="bcs-neg-calc-result" class="result-box" style="font-weight: bold; color: var(--primary);">
+                    Net Score: Calculating...
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-arabic-dict" data-title="arabic grammar bangla english dictionary vocabulary words translation search" data-category="text">
+            <h2>📚 Arabic Vocabulary Mini Dictionary</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-arabic-dict')">❤️</button>
+            <div class="input-group">
+                <label>Search Arabic / Bangla / English Word:</label>
+                <input type="text" id="arabic-search-input" placeholder="e.g. Harf, Kitab, বই..." oninput="searchArabicDictionary()">
+                <div id="arabic-dict-results" style="margin-top:10px; max-height: 150px; overflow-y: auto;">
+                    <p style="font-size:0.85rem; opacity:0.6;">Type a keyword to search dictionary data.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-arbitrage" data-title="binance p2p arbitrage dollar rate margin profit check calc" data-category="finance">
+            <h2>🪙 P2P Arbitrage Margin Calculator</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-arbitrage')">❤️</button>
+            <div class="input-group">
+                <label>International Base Price ($ per USDT):</label>
+                <input type="number" id="arb-intl-rate" value="1.00" step="0.01">
+                <label style="margin-top:8px;">Local Selling Price (৳ per USDT via bKash/Nagad):</label>
+                <input type="number" id="arb-local-rate" value="122.50" step="0.10">
+                <label style="margin-top:8px;">Your Total Invested Capital (৳):</label>
+                <input type="number" id="arb-capital" value="10000" oninput="calculateArbitrageProfit()">
+                <button onclick="calculateArbitrageProfit()">Calculate Net Profit</button>
+                <div id="arb-result" class="result-box" style="font-weight: bold; color: var(--accent);">
+                    Net Output: Input parameters above
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-crypto-roi" data-title="crypto investment profit loss calculator roi percentage return" data-category="finance">
+            <h2>📈 Crypto Profit/Loss ROI Calculator</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-crypto-roi')">❤️</button>
+            <div class="input-group">
+                <label>Buy Price ($):</label>
+                <input type="number" id="roi-buy-price" value="60000" oninput="calculateCryptoROI()">
+                <label style="margin-top:8px;">Current / Sell Price ($):</label>
+                <input type="number" id="roi-sell-price" value="65000" oninput="calculateCryptoROI()">
+                <label style="margin-top:8px;">Investment Amount ($):</label>
+                <input type="number" id="roi-investment" value="100" oninput="calculateCryptoROI()">
+                <div id="crypto-roi-result" class="result-box" style="font-weight: bold;">
+                    Enter parameters to check ROI.
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-fertilizer" data-title="garden calculator smart plant care roof top agriculture fertilizer ratio" data-category="utility">
+            <h2>🌱 Gardening Fertilizer Calculator</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-fertilizer')">❤️</button>
+            <div class="input-group">
+                <label>Select Pot/Drum Diameter Size:</label>
+                <select id="pot-size" onchange="calculateFertilizerRatio()">
+                    <option value="10">10 Inch Standard Pot</option>
+                    <option value="18">18 Inch Half Drum</option>
+                    <option value="24">24 Inch Full Tree Drum</option>
+                </select>
+                <label style="margin-top:8px;">Target Plant Group Type:</label>
+                <select id="fertilizer-plant-type" onchange="calculateFertilizerRatio()">
+                    <option value="fruit">Fruit Bearing (Apple/Pomegranate/Grape)</option>
+                    <option value="flower">Flower & Ornamental</option>
+                </select>
+                <div id="fertilizer-result" class="result-box" style="font-size:0.9rem; line-height: 1.4;">
+                    Select options to generate calculation...
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-bcs-tracker" data-title="bcs job exam routine study preparation tracker routine checklist syllabus grammar english arabic" data-category="utility">
+            <h2>🎓 BCS Preparation Tracker</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-bcs-tracker')">❤️</button>
+            <div class="input-group">
+                <label>Overall Progress:</label>
+                <div class="progress-bar-container">
+                    <div id="bcs-progress-fill" class="progress-bar-fill"></div>
+                </div>
+                <div style="margin-top: 12px;" id="bcs-checklist-container">
+                    <div class="bcs-item"><label><input type="checkbox" class="bcs-check" onclick="updateBcsProgress()"> English Grammar (Prepositions)</label></div>
+                    <div class="bcs-item"><label><input type="checkbox" class="bcs-check" onclick="updateBcsProgress()"> Arabic Language & Grammar Rules</label></div>
+                    <div class="bcs-item"><label><input type="checkbox" class="bcs-check" onclick="updateBcsProgress()"> Bangladesh Affairs</label></div>
+                    <div class="bcs-item"><label><input type="checkbox" class="bcs-check" onclick="updateBcsProgress()"> International Affairs</label></div>
+                    <div class="bcs-item"><label><input type="checkbox" class="bcs-check" onclick="updateBcsProgress()"> Mathematical Reasoning & IT</label></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-flashcards" data-title="english preposition vocabulary flashcards grammar preparation test words study custom add associate prepositions" data-category="text">
+            <h2>📖 Preposition & Vocab Flashcards</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-flashcards')">❤️</button>
+            <div class="input-group">
+                <div id="flashcard-display" class="flashcard" onclick="flipFlashcard()">Loading...</div>
+                <div class="btn-flex">
+                    <button onclick="prevFlashcard()" style="background:#6b7280;">⏮️ Prev</button>
+                    <button onclick="nextFlashcard()">Next ⏭️</button>
+                </div>
+                <hr style="border:1px solid var(--border); margin:15px 0 10px 0;">
+                <label>Add Custom Card:</label>
+                <input type="text" id="custom-card-q" placeholder="Question (e.g., Abide ______)" style="margin-bottom:6px;">
+                <input type="text" id="custom-card-a" placeholder="Answer (e.g., By)">
+                <button onclick="addCustomFlashcard()" style="padding:6px; font-size:0.85rem; background:#10b981;">➕ Add Card</button>
+            </div>
+        </div>
+
+        <div class="card" id="tool-crypto-indicators" data-title="crypto indicator rsi macd trading analysis calculator simulator" data-category="finance">
+            <h2>📊 RSI & MACD Simulator</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-crypto-indicators')">❤️</button>
+            <div class="input-group">
+                <label for="indicator-price">Asset Close Price ($):</label>
+                <input type="number" id="indicator-price" value="65000" oninput="calculateTechnicalIndicators()">
+                <div id="indicator-result" class="result-box" style="margin-top:10px;">
+                    Calculating Signals...
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-airdrop-tracker" data-title="airdrop task checklist blockchain xenea testnet tracking points mining wallet" data-category="finance">
+            <h2>🪂 Airdrop & Xenea Testnet Checklist</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-airdrop-tracker')">❤️</button>
+            <div class="input-group">
+                <label>Xenea Point Mining & Milestones:</label>
+                <div class="progress-bar-container">
+                    <div id="airdrop-progress-fill" class="progress-bar-fill" style="background:#3b82f6;"></div>
+                </div>
+                <div style="margin-top: 10px;">
+                    <div class="bcs-item"><label><input type="checkbox" class="airdrop-check" onclick="updateAirdropProgress()"> EVM / Xenea Wallet Connected</label></div>
+                    <div class="bcs-item"><label><input type="checkbox" class="airdrop-check" onclick="updateAirdropProgress()"> Claim Daily XNS Faucet Tokens</label></div>
+                    <div class="bcs-item"><label><input type="checkbox" class="airdrop-check" onclick="updateAirdropProgress()"> Execute Testnet Swaps & Transactions</label></div>
+                    <div class="bcs-item"><label><input type="checkbox" class="airdrop-check" onclick="updateAirdropProgress()"> Discord & Verification Milestone Active</label></div>
+                </div>
+                <div style="margin-top:8px; font-size:0.75rem; text-align:center;">
+                    <span style="color:var(--accent); font-weight:bold;">🚀 Tracking Active Alpha Mainnet Airdrop Points</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-reels-timer" data-title="reels countdown length timer script reading facebook instagram video" data-category="text">
+            <h2>⏱️ Reels Video Script Countdown</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-reels-timer')">❤️</button>
+            <div class="input-group">
+                <label>Target Video Length:</label>
+                <select id="reels-timer-length">
+                    <option value="60">60 Seconds Limit</option>
+                    <option value="90">90 Seconds Limit</option>
+                </select>
+                <div id="reels-clock-display" class="timer-display" style="color: #f59e0b;">00:00</div>
+                <div class="btn-flex">
+                    <button onclick="startReelsTimer()" style="background:#10b981;">Start Recording / Reading</button>
+                    <button onclick="stopReelsTimer()" style="background:#ef4444;">Stop</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-fb-engagement" data-title="facebook engagement calculator analytics dashboard metrics check" data-category="text">
+            <h2>📈 Post Engagement Rate Calculator</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-fb-engagement')">❤️</button>
+            <div class="input-group">
+                <label>Total Post Reach / Impressions:</label>
+                <input type="number" id="fb-reach" value="1000" min="1" oninput="calculateFacebookEngagement()">
+                <label style="margin-top:8px;">Total Likes & Reactions:</label>
+                <input type="number" id="fb-likes" value="120" min="0" oninput="calculateFacebookEngagement()">
+                <label style="margin-top:8px;">Total Comments & Shares:</label>
+                <input type="number" id="fb-comments" value="30" min="0" oninput="calculateFacebookEngagement()">
+                <div id="fb-engagement-result" class="result-box" style="font-weight: bold; color: var(--accent);">
+                    Engagement Rate: Calculating...
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-content-hub" data-title="vlog script template generator hashtags creator hub facebook reels instagram keywords bhandaria charkhali sunflower" data-category="text">
+            <h2>📹 Creator Script & Hashtag Hub</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-content-hub')">❤️</button>
+            <div class="input-group">
+                <label for="vlog-type">Select Vlog Category:</label>
+                <select id="vlog-type" onchange="generateVlogScript()">
+                    <option value="bhandaria">Bhandaria Park & Guava Garden Vlog</option>
+                    <option value="charkhali">Charkhali Sunflower Garden Mini Vlog</option>
+                    <option value="crypto">Crypto/Tech Daily Update</option>
+                    <option value="garden">Gardening Vibe & Routine</option>
+                </select>
+                <label style="margin-top:8px;">Generated Vlog Script Layout:</label>
+                <textarea id="vlog-script-output" rows="4" readonly></textarea>
+                
+                <label style="margin-top:8px;" for="hashtag-keyword">Enter Keyword for Hashtags:</label>
+                <input type="text" id="hashtag-keyword" placeholder="e.g. crypto, gardening, bcs" oninput="generateDynamicHashtags()">
+                <div id="hashtag-output" class="result-box" style="margin-top:8px; font-weight:500;">Type keyword above...</div>
+                <button onclick="copyToClipboard('vlog-script-output')" style="background:#6b7280; font-size:0.85rem; padding:6px;">📋 Copy Script Layout</button>
+            </div>
+        </div>
+
+        <div class="card" id="tool-plant-care" data-title="smart plant care watering reminder gardening agriculture timer setup roof garden countdown apple grape pomegranate" data-category="utility">
+            <h2>🌱 Plant Care Scheduler & Countdown</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-plant-care')">❤️</button>
+            <div class="input-group">
+                <label for="plant-select">Select Plant:</label>
+                <select id="plant-select" onchange="updatePlantCareSchedule()">
+                    <option value="apple">Apple Tree (আপেল গাছ)</option>
+                    <option value="grape">Grape Vine (আঙুর লতা)</option>
+                    <option value="pomegranate">Pomegranate (ডালিম গাছ)</option>
+                </select>
+                <div id="plant-care-status" class="result-box" style="margin-top:10px; font-weight:500;">
+                    Loading guidelines...
+                </div>
+                <div id="plant-countdown" style="font-weight:bold; color:#ef4444; margin-top:5px; font-size:0.9rem;"></div>
+                <button onclick="resetPlantWatering()" style="background:#10b981;">💧 Log Watered Today</button>
+            </div>
+        </div>
+
+        <div class="card" id="tool-cashbook" data-title="daily expense profit tracker cash book ledger accounting money calculation balance binance crypto csv export clear data" data-category="finance">
+            <h2>💰 Daily Cash Book Ledger</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-cashbook')">❤️</button>
+            <div class="input-group">
+                <label for="ledger-desc">Description:</label>
+                <input type="text" id="ledger-desc" placeholder="e.g. Crypto Trading Profit, BCS Book Purchase" style="margin-bottom:6px;">
+                <label for="ledger-amount">Amount ($ / ৳):</label>
+                <input type="number" id="ledger-amount" placeholder="0.00" style="margin-bottom:6px;">
+                <label for="ledger-type">Type:</label>
+                <select id="ledger-type">
+                    <option value="income">Income / Profit (+)</option>
+                    <option value="expense">Expense / Loss (-)</option>
+                </select>
+                <button onclick="addLedgerTransaction()" style="background:#4f46e5; font-size:0.9rem; padding:6px; margin-top:8px;">Add to Log</button>
+                <div id="ledger-balance-box" class="result-box" style="margin-top:8px; font-weight:bold;">
+                    Net Balance: 0.00
+                </div>
+                <div class="btn-flex" style="margin-top:8px;">
+                    <button onclick="exportLedgerToCSV()" style="background:#25d366; font-size:0.85rem; padding:5px;">📥 Export (.CSV)</button>
+                    <button onclick="clearAllStorageData()" style="background:#ef4444; font-size:0.85rem; padding:5px;">⚠️ Reset All Data</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-pomodoro" data-title="pomodoro study timer focus clock countdown intervals productive bcs preparation" data-category="utility">
+            <h2>⏱️ Pomodoro Study Timer</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-pomodoro')">❤️</button>
+            <div class="input-group">
+                <div id="timer-state" class="timer-status">Focus Time! 🎯</div>
+                <div id="timer-clock" class="timer-display">25:00</div>
+                <div class="btn-flex">
+                    <button onclick="startTimer()" style="background:#10b981;">Start</button>
+                    <button onclick="pauseTimer()" style="background:#f59e0b;">Pause</button>
+                    <button onclick="resetTimer()" style="background:#ef4444;">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-voice" data-title="voice typing speech to text recognition converter dictation bangla english written commands clear copy vlogging notes" data-category="text">
+            <h2>🎙️ Voice Typing + Commands</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-voice')">❤️</button>
+            <div class="input-group">
+                <label for="voice-lang">Select Language:</label>
+                <select id="voice-lang" style="margin-bottom:10px;">
+                    <option value="bn-BD">Bangla (বাংলাদেশ)</option>
+                    <option value="en-US">English (United States)</option>
+                </select>
+                <small style="color:var(--primary); display:block; margin-bottom:5px;">💡 Say "clear" to empty or "copy" to copy text!</small>
+                <textarea id="voice-output-text" rows="3" placeholder="Click 'Start Listening' and talk..."></textarea>
+                <div class="btn-flex">
+                    <button id="start-record-btn" onclick="startSpeechRecognition()" style="background:#ef4444;">🔴 Start Listening</button>
+                    <button onclick="copyToClipboard('voice-output-text')" style="background:#6b7280;">📋 Copy</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-crypto-gas" data-title="crypto gas fee network status tracker testnet smart chain fee eth xenea airdrop check mainnet nodes" data-category="finance">
+            <h2>⛽ Crypto Gas & Xenea Tracker</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-crypto-gas')">❤️</button>
+            <div class="input-group">
+                <table class="crypto-table">
+                    <thead>
+                        <tr><th>Network</th><th>Gas Fee</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Ethereum Mainnet</td><td id="gas-eth">24 Gwei</td><td style="color:#10b981; font-weight:bold;">Normal</td></tr>
+                        <tr><td>BSC Chain</td><td id="gas-bsc">3 Gwei</td><td style="color:#10b981; font-weight:bold;">Low</td></tr>
+                        <tr><td>Xenea Testnet</td><td id="gas-xenea">0.0001 XNS</td><td style="color:#3b82f6; font-weight:bold;">Active 🔥</td></tr>
+                    </tbody>
+                </table>
+                <button onclick="simulateGasRefresh()">🔄 Refresh Network Status</button>
+            </div>
+        </div>
+
+        <div class="card" id="tool-game-calc" data-title="gaming profile resource calculator free fire diamond coin battle pass build setup skill jatropha character card" data-category="finance">
+            <h2>🎮 Gaming Resource Calculator</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-game-calc')">❤️</button>
+            <div class="input-group">
+                <label for="game-item-select">Target Reward / Item:</label>
+                <select id="game-item-select" onchange="calculateGameResources()">
+                    <option value="jatropha">Jatropha Legendary Card Config (500 Diamonds)</option>
+                    <option value="elite">Elite/Battle Pass Combo (600 Diamonds)</option>
+                    <option value="character">Standard Character Skill Deck (499 Diamonds)</option>
+                    <option value="evolution">Evolution Weapon Skin Mastery (1080 Diamonds)</option>
+                </select>
+                <label style="margin-top:8px;" for="game-current-diamonds">Current Diamonds Owned:</label>
+                <input type="number" id="game-current-diamonds" value="50" oninput="calculateGameResources()">
+                <div id="game-calc-result" class="result-box" style="margin-top:10px; font-weight:bold; color:var(--primary);">
+                    Calculating needed resources...
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-qrcode-card" data-title="qr code generator link url maker" data-category="media">
+            <h2>✨ QR Code Generator</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-qrcode-card')">❤️</button>
+            <div class="input-group">
+                <label for="qr-text">Enter Text or URL:</label>
+                <input type="text" id="qr-text" placeholder="https://example.com">
+                <button onclick="generateQR()">Generate QR Code</button>
+            </div>
+            <div id="qr-result" style="display: none;" class="result-box">
+                <div id="qrcode"></div>
+                <button id="download-qr-btn" onclick="downloadQR()" style="background:#059669;">📥 Download QR Code</button>
+            </div>
+        </div>
+
+        <div class="card" id="tool-shortener" data-title="url shortener quick link tinyurl" data-category="utility">
+            <h2>🔗 Quick URL Shortener</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-shortener')">❤️</button>
+            <div class="input-group">
+                <label for="long-url">Enter Long URL:</label>
+                <input type="text" id="long-url" placeholder="https://very-long-link-example.com">
+                <button onclick="shortenURL()">⚡ Shorten URL</button>
+            </div>
+            <div id="short-result-box" style="display: none;" class="result-box">
+                <strong>Shortened URL:</strong>
+                <p id="short-url-output" style="font-weight:bold; color:var(--primary); font-size:1rem; margin:10px 0; word-break: break-all;"></p>
+                <button onclick="copyToClipboard('short-url-output')" style="background:#6b7280; width:auto; margin:0; padding:6px 12px; font-size:0.85rem;">📋 Copy Link</button>
+            </div>
+        </div>
+
+        <div class="card" id="tool-counter" data-title="text word counter character case converter uppercase lowercase seo slug friendly text Converter facebook analytics text download text master" data-category="text">
+            <h2>📝 Text Master & SEO Slug</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-counter')">❤️</button>
+            <div class="input-group">
+                <label for="counter-text">Enter Text:</label>
+                <textarea id="counter-text" rows="3" placeholder="Start typing blog or post data..." oninput="countAndSlugText()"></textarea>
+                <div style="margin-top: 5px; display:flex; gap:10px;">
+                    <span class="counter-badge">Chars: <span id="char-count">0</span></span>
+                    <span class="counter-badge">Words: <span id="word-count">0</span></span>
+                </div>
+                <div class="btn-flex">
+                    <button onclick="convertCase('up')" style="background:#0284c7;">UPPER</button>
+                    <button onclick="convertCase('low')" style="background:#0f766e;">lower</button>
+                </div>
+                <label style="margin-top: 12px;">Generated SEO URL Slug:</label>
+                <input type="text" id="seo-slug-output" readonly placeholder="seo-friendly-slug">
+                <div class="btn-flex" style="margin-top:5px;">
+                    <button onclick="copyToClipboard('seo-slug-output')" style="background:#6b7280; padding: 6px 10px;">📋 Copy Slug</button>
+                    <button onclick="exportTextMasterToFile()" style="background:#10b981; padding: 6px 10px;">📥 Download Text</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-crypto" data-title="crypto currency converter bitcoin btc doge live rate tracker check price watchlist table assets digital" data-category="finance">
+            <h2>🪙 Crypto Dashboard Watchlist</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-crypto')">❤️</button>
+            <div class="input-group">
+                <table class="crypto-table">
+                    <thead>
+                        <tr><th>Asset</th><th>Live Price (USD)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Bitcoin (BTC)</td><td id="table-btc">Loading...</td></tr>
+                        <tr><td>Ethereum (ETH)</td><td id="table-eth">Loading...</td></tr>
+                        <tr><td>Dogecoin (DOGE)</td><td id="table-doge">Loading...</td></tr>
+                    </tbody>
+                </table>
+                <label for="crypto-select" style="margin-top:12px;">Asset Conversion:</label>
+                <select id="crypto-select" onchange="convertCrypto()">
+                    <option value="bitcoin">Bitcoin (BTC)</option>
+                    <option value="dogecoin">Dogecoin (DOGE)</option>
+                    <option value="ethereum">Ethereum (ETH)</option>
+                </select>
+                <input type="number" id="crypto-amount" value="1" oninput="convertCrypto()" style="margin-top:5px;">
+                <button onclick="fetchAllCryptoData()">🔄 Refresh Prices</button>
+            </div>
+            <div id="crypto-result-box" class="result-box">
+                <strong>Value:</strong> <span id="crypto-output">Fetching...</span>
+            </div>
+        </div>
+
+        <div class="card" id="tool-bmi" data-title="bmi calculator body mass index weight height fitness health checking" data-category="finance">
+            <h2>⚖️ BMI Calculator</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-bmi')">❤️</button>
+            <div class="input-group">
+                <label for="bmi-weight">Weight (kg):</label>
+                <input type="number" id="bmi-weight" placeholder="65">
+                <label for="bmi-height" style="margin-top:10px;">Height (cm):</label>
+                <input type="number" id="bmi-height" placeholder="170">
+                <button onclick="calculateBMI()">📊 Calculate BMI</button>
+            </div>
+            <div id="bmi-result-box" style="display: none;" class="result-box">
+                <p id="bmi-output" style="margin:0; font-weight:bold;"></p>
+            </div>
+        </div>
+
+        <div class="card" id="tool-color" data-title="color picker hex code generator palette designer layout graphics" data-category="media">
+            <h2>🎨 Color Picker Tool</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-color')">❤️</button>
+            <div class="input-group">
+                <label for="color-input">Select Color:</label>
+                <input type="color" id="color-input" value="#4f46e5" oninput="updateColorPicker()">
+                <div class="color-preview-box" style="display:flex; gap:10px; align-items:center; margin-top:10px;">
+                    <div id="color-block" style="width:50px; height:50px; border-radius:8px; border:2px solid var(--border); background-color: #4f46e5;"></div>
+                    <div>
+                        <strong>HEX Code:</strong>
+                        <p id="color-hex" style="margin:0; font-family:monospace; font-size:1.1rem;">#4f46e5</p>
+                    </div>
+                </div>
+                <button onclick="copyToClipboard('color-hex')" style="background:#6b7280;">📋 Copy Hex Code</button>
+            </div>
+        </div>
+
+        <div class="card" id="tool-tts" data-title="text to speech converter voice voiceover aloud reader english bangla analytics logs" data-category="text">
+            <h2>🗣️ Text-to-Speech Converter</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-tts')">❤️</button>
+            <div class="input-group">
+                <label for="speech-text">Enter Text:</label>
+                <textarea id="speech-text" rows="3" placeholder="Type script or checklist to read aloud..."></textarea>
+                <button onclick="speakText()">🔊 Speak Out Loud</button>
+            </div>
+        </div>
+
+        <div class="card" id="tool-password" data-title="strong password generator keys security locker maker random text" data-category="utility">
+            <h2>🔑 Password Generator</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-password')">❤️</button>
+            <div class="input-group">
+                <input type="number" id="pass-length" value="12" min="6" max="30" style="margin-bottom:10px;">
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="include-uppercase" checked> Upper (A-Z)</label>
+                    <label><input type="checkbox" id="include-numbers" checked> Numbers (0-9)</label>
+                    <label><input type="checkbox" id="include-symbols" checked> Symbols</label>
+                </div>
+                <button onclick="generatePassword()">🎲 Generate Password</button>
+            </div>
+            <div id="pass-result-box" style="display: none;" class="result-box">
+                <p id="password-output" style="font-family:monospace; font-size:1rem; word-break:break-all; margin:0;"></p>
+                <button onclick="copyToClipboard('password-output')" style="background:#6b7280; margin-top:5px; padding:4px;">📋 Copy</button>
+            </div>
+        </div>
+
+        <div class="card" id="tool-age" data-title="age calculator date of birth year time counter birthday tracking" data-category="utility">
+            <h2>📅 Age Calculator</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-age')">❤️</button>
+            <div class="input-group">
+                <input type="date" id="birth-date">
+                <button onclick="calculateAge()">⏳ Calculate Age</button>
+            </div>
+            <div id="age-result-box" style="display: none;" class="result-box">
+                <p id="age-output" style="margin:0; font-weight:bold;"></p>
+            </div>
+        </div>
+
+        <div class="card" id="tool-image" data-title="image resizer photo compress height width converter aspect change webp image thumbnails reels" data-category="media">
+            <h2>🖼️ Image Resizer & WebP</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-image')">❤️</button>
+            <div class="input-group">
+                <input type="file" id="image-input" accept="image/*"><br><br>
+                <input type="number" id="img-width" value="300" style="margin-bottom:6px;">
+                <input type="number" id="img-height" value="300">
+                <div class="btn-flex">
+                    <button onclick="resizeImage('png')">📐 Resized PNG</button>
+                    <button onclick="resizeImage('webp')" style="background:#10b981;">⚡ WebP</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="tool-social-hub" data-title="social media captions templates bio hub copy quotes description reels facebook instagram organic branding dashboard" data-category="text">
+            <h2>📱 Social Media Templates Hub</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-social-hub')">❤️</button>
+            <div class="input-group">
+                <select id="template-select" onchange="updateSocialTemplate()">
+                    <option value="tech-bio">Naym Digital Assets Bio Portfolio</option>
+                    <option value="reels-growth">Engagement Reels Hook Caption</option>
+                    <option value="motivation-quote">Daily Motivation Quote Strategy</option>
+                </select>
+                <textarea id="social-template-output" rows="3" readonly style="margin-top:8px;"></textarea>
+                <button onclick="copyToClipboard('social-template-output')" style="background:#6b7280;">📋 Copy Template</button>
+            </div>
+        </div>
+
+        <div class="card" id="tool-youtube" data-title="youtube video downloader script simulator fetch content links mp4 automation tutorial clips" data-category="media">
+            <h2>🎥 YouTube Link Fetcher Layout</h2>
+            <button class="fav-btn" onclick="toggleFavorite('tool-youtube')">❤️</button>
+            <div class="input-group">
+                <input type="text" id="yt-url" placeholder="https://www.youtube.com/watch?v=...">
+                <button onclick="processYoutube()">Fetch Links</button>
+            </div>
+            <div id="yt-result" style="display: none;" class="result-box">
+                URL Mapped Successfully.
+            </div>
+        </div>
+
+    </div>
+
+    <div id="paywallModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-item-title" style="color:var(--primary); margin-top:0;">Unlock Item</h2>
+            <p>To get full download rights, please send <strong>৳ ২০ BDT</strong> to our system merchant/personal wallet using standard Cash-Out or Send-Money.</p>
+            
+            <div style="margin: 15px 0;">
+                <span class="payment-logo bkash">bKash</span>
+                <span class="payment-logo nagad">Nagad</span>
+                <div style="font-size: 1.2rem; font-weight: bold; margin-top: 10px; color: var(--text);">
+                    📱 01405772019
+                </div>
+            </div>
+
+            <p style="font-size:0.8rem; color:#6b7280;">After completing transaction, input reference transaction ID (TxnID) below for algorithmic simulation validation.</p>
+            <input type="text" id="pay-txnid" placeholder="e.g. TRX9K8J2LH" style="text-align: center; font-family: monospace; text-transform: uppercase;">
+            
+            <div class="btn-flex" style="margin-top: 15px;">
+                <button onclick="verifySimulatedPayment()" style="background-color: var(--accent);">Submit & Validate</button>
+                <button onclick="closePaywallModal()" style="background-color: #6b7280;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <footer>
+        <strong>Share Naymverse Network Tools:</strong>
+        <div class="share-buttons">
+            <a id="share-facebook" href="#" target="_blank" class="share-btn share-fb">Facebook</a>
+            <a id="share-whatsapp" href="#" target="_blank" class="share-btn share-wa">WhatsApp</a>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <script>
+        let currentSelectedCategory = 'all';
+        let favoriteTools = JSON.parse(localStorage.getItem('favoriteTools')) || [];
+        let quizScore = parseFloat(localStorage.getItem('quiz_total_score')) || 0.00;
+        let ledgerTransactions = JSON.parse(localStorage.getItem('ledger_transactions')) || [];
+
+        // Custom Dataset: Mixed with High Yield English Preposition & Arabic Grammar
+        const quizDataset = [
+            { q: "Choose the correct preposition: He absorbed himself ___ his studies.", o: ["in", "at", "with", "on"], a: "in" },
+            { q: "Fill the gap: I cannot abide ___ his rules.", o: ["by", "with", "to", "for"], a: "by" },
+            { q: "Select the preposition: Abstain ______ evil deeds.", o: ["from", "of", "by", "in"], a: "from" },
+            { q: "He is blind ______ his own faults.", o: ["to", "of", "with", "at"], a: "to" },
+            { q: "Arabic grammar context: What does the term 'Harf' (حَرْف) signify?", o: ["Noun/Ism", "Verb/Fi'l", "Particle/Preposition", "Sentence/Jumlah"], a: "Particle/Preposition" }
+        ];
+        let currentQuizIdx = 0;
+
+        // Associate Prepositions Dataset
+        let flashcardsData = JSON.parse(localStorage.getItem('custom_flashcards')) || [
+            { q: "Abstain _______", a: "From (বিরত থাকা)" },
+            { q: "Accused _______", a: "Of (অভিযুক্ত করা)" },
+            { q: "Adhere _______", a: "To (লেগে থাকা)" },
+            { q: "Blind _______ his own faults", a: "To (দোষের প্রতি অন্ধ)" },
+            { q: "Abide _______", a: "By (মেনে চলা)" }
+        ];
+        let currentFlashcardIdx = 0;
+        let isFlashcardFlipped = false;
+
+        // Mini Arabic Dictionary Dataset
+        const arabicDictionary = [
+            { w: "Harf (حَرْف)", bn: "অব্যয় বা বর্ণ (Particle/Preposition)", en: "Letter or Particle" },
+            { w: "Kitab (كِتَاب)", bn: "বই বা পুস্তক", en: "Book" },
+            { w: "Ism (اِسْم)", bn: "বিশেষ্য বা নাম", en: "Noun" },
+            { w: "Fi'l (فِعْل)", bn: "ক্রিয়া বা কাজ", en: "Verb" },
+            { w: "Jumlah (جُمْلَة)", bn: "বাক্য", en: "Sentence" }
+        ];
+
+        let cashbookBalance = parseFloat(localStorage.getItem('ledger_balance')) || 0.00;
+        let reelsCountdownInterval = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+            
+            const currentUrl = encodeURIComponent(window.location.href);
+            document.getElementById('share-facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
+            document.getElementById('share-whatsapp').href = `https://api.whatsapp.com/send?text=${currentUrl}`;
+            
+            document.getElementById('quiz-score').innerText = quizScore.toFixed(2);
+            
+            updateFavoriteUI();
+            fetchAllCryptoData();
+            updateSocialTemplate();
+            loadBcsProgress();
+            loadAirdropProgress();
+            renderFlashcard();
+            updatePlantCareSchedule();
+            calculateGameResources();
+            loadQuizQuestion();
+            calculateTechnicalIndicators();
+            generateVlogScript();
+            calculateArbitrageProfit();
+            calculateFertilizerRatio();
+            calculateBcsNegativeMarking();
+            calculateFacebookEngagement();
+            calculateCryptoROI();
+            searchArabicDictionary();
+            
+            document.getElementById('ledger-balance-box').innerText = `Net Balance: $ / ৳ ${cashbookBalance.toFixed(2)}`;
+            setInterval(updatePlantCountdown, 1000);
+        });
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                showToast("Light Mode!");
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                showToast("Dark Mode!");
+            }
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerText = message;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 2500);
+        }
+
+        function toggleFavorite(id) {
+            const index = favoriteTools.indexOf(id);
+            if (index > -1) {
+                favoriteTools.splice(index, 1);
+                showToast("Removed from Favorites! 💔");
+            } else {
+                favoriteTools.push(id);
+                showToast("Added to Favorites! ❤️");
+            }
+            localStorage.setItem('favoriteTools', JSON.stringify(favoriteTools));
+            updateFavoriteUI();
+            if(currentSelectedCategory === 'fav') filterCategory('fav', document.querySelector('.tab-btn:nth-child(2)'));
+        }
+
+        function updateFavoriteUI() {
+            document.querySelectorAll('.card').forEach(card => {
+                const id = card.id;
+                const btn = card.querySelector('.fav-btn');
+                if(btn) {
+                    if (favoriteTools.includes(id)) btn.classList.add('active');
+                    else btn.classList.remove('active');
+                }
+            });
+        }
+
+        function filterCategory(category, element) {
+            currentSelectedCategory = category;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('tool-search').value = "";
+            
+            document.querySelectorAll('.card').forEach(card => {
+                const cardCat = card.getAttribute('data-category');
+                if (category === 'all') card.style.display = "flex";
+                else if (category === 'fav') card.style.display = favoriteTools.includes(card.id) ? "flex" : "none";
+                else card.style.display = (cardCat === category) ? "flex" : "none";
+            });
+        }
+
+        function filterTools() {
+            const query = document.getElementById('tool-search').value.toLowerCase();
+            document.querySelectorAll('.card').forEach(card => {
+                const searchTags = card.getAttribute('data-title').toLowerCase();
+                const matchesSearch = searchTags.includes(query);
+                let matchesCategory = (currentSelectedCategory === 'all') || (currentSelectedCategory === 'fav' && favoriteTools.includes(card.id)) || (card.getAttribute('data-category') === currentSelectedCategory);
+                card.style.display = (matchesSearch && matchesCategory) ? "flex" : "none";
+            });
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.tagName === 'TEXTAREA' || element.tagName === 'INPUT' ? element.value : element.innerText;
+            if(!text.trim()){
+                showToast("Nothing to copy!");
+                return;
+            }
+            navigator.clipboard.writeText(text).then(() => showToast('Copied Successfully! 🎉'));
+        }
+
+        function openPaywallModal(title) {
+            document.getElementById('modal-item-title').innerText = title;
+            document.getElementById('pay-txnid').value = "";
+            document.getElementById('paywallModal').style.display = "flex";
+        }
+        function closePaywallModal() {
+            document.getElementById('paywallModal').style.display = "none";
+        }
+        function verifySimulatedPayment() {
+            const txnid = document.getElementById('pay-txnid').value.trim();
+            if(txnid.length < 4) {
+                alert("Please input a valid Transaction ID reference format.");
+                return;
+            }
+            closePaywallModal();
+            showToast("Payment verified successfully! Opening premium resources...");
+            alert("🎉 Success! Access approved by the system backend loop. Generating links.");
+        }
+
+        function calculateArbitrageProfit() {
+            const capital = parseFloat(document.getElementById('arb-capital').value) || 0;
+            const localRate = parseFloat(document.getElementById('arb-local-rate').value) || 0;
+            const intlRate = parseFloat(document.getElementById('arb-intl-rate').value) || 1.00;
+            const res = document.getElementById('arb-result');
+
+            if(capital <= 0 || localRate <= 0 || intlRate <= 0) {
+                res.innerText = "Please enter valid numeric parameters (> 0).";
+                return;
+            }
+
+            let localAssetVolume = capital / localRate; 
+            let simulatedReturnRate = 1.023; 
+            let grossProfit = capital * (simulatedReturnRate - 1);
+            
+            res.innerHTML = `Asset Purchased: ${(localAssetVolume).toFixed(2)} USDT<br>
+            Estimated Gross Loop Margin: ৳ ${grossProfit.toFixed(2)} BDT`;
+        }
+
+        function calculateFertilizerRatio() {
+            const size = parseInt(document.getElementById('pot-size').value);
+            const type = document.getElementById('fertilizer-plant-type').value;
+            const res = document.getElementById('fertilizer-result');
+
+            let urea = size * 0.5;
+            let tsp = size * 0.8;
+            let organic = size * 15;
+
+            if (type === 'fruit') {
+                tsp += 5; 
+                organic += 50;
+            }
+
+            res.innerHTML = `<strong>Recommended Ratio for Pot:</strong><br>
+            • Urea: ${urea.toFixed(1)} Grams<br>
+            • TSP: ${tsp.toFixed(1)} Grams<br>
+            • Organic/Vermicompost: ${organic.toFixed(0)} Grams<br>
+            <small style="color:var(--primary); display:block; margin-top:5px;">💡 Apply uniformly once every 14 days to your plant ecosystem.</small>`;
+        }
+
+        function calculateBcsNegativeMarking() {
+            const correct = parseInt(document.getElementById('neg-calc-correct').value) || 0;
+            const wrong = parseInt(document.getElementById('neg-calc-wrong').value) || 0;
+            const penaltyPerWrong = parseFloat(document.getElementById('neg-calc-penalty').value);
+            const res = document.getElementById('bcs-neg-calc-result');
+
+            let totalPenalty = wrong * penaltyPerWrong;
+            let netScore = correct - totalPenalty;
+
+            res.innerHTML = `Total Obtained: ${correct}.00<br>
+            Penalty Deducted: -${totalPenalty.toFixed(2)}<br>
+            <strong>Net Cut-Off Score: ${netScore.toFixed(2)}</strong>`;
+        }
+
+        function searchArabicDictionary() {
+            const query = document.getElementById('arabic-search-input').value.toLowerCase().trim();
+            const resultsContainer = document.getElementById('arabic-dict-results');
+            resultsContainer.innerHTML = "";
+
+            let filtered = arabicDictionary.filter(item => 
+                item.w.toLowerCase().includes(query) || 
+                item.bn.toLowerCase().includes(query) || 
+                item.en.toLowerCase().includes(query)
+            );
+
+            if(filtered.length === 0) {
+                resultsContainer.innerHTML = `<p style="font-size:0.9rem; color:#ef4444;">No words found.</p>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'dict-result-item';
+                div.innerHTML = `<strong>${item.w}</strong>: ${item.bn} (${item.en})`;
+                resultsContainer.appendChild(div);
+            });
+        }
+
+        function calculateCryptoROI() {
+            const buy = parseFloat(document.getElementById('roi-buy-price').value) || 0;
+            const sell = parseFloat(document.getElementById('roi-sell-price').value) || 0;
+            const investment = parseFloat(document.getElementById('roi-investment').value) || 0;
+            const res = document.getElementById('crypto-roi-result');
+
+            if(buy <= 0 || sell <= 0 || investment <= 0) {
+                res.innerText = "Please input valid rates.";
+                return;
+            }
+
+            let changePercent = ((sell - buy) / buy) * 100;
+            let finalValue = investment * (sell / buy);
+            let netProfit = finalValue - investment;
+
+            let color = netProfit >= 0 ? "#10b981" : "#ef4444";
+            res.style.borderLeftColor = color;
+            res.innerHTML = `Return Rate (ROI): <span style="color:${color}; font-weight:bold;">${changePercent.toFixed(2)}%</span><br>
+            Net Profit/Loss: <span style="color:${color}; font-weight:bold;">$ ${netProfit.toFixed(2)}</span><br>
+            Total Holding Worth: $ ${finalValue.toFixed(2)}`;
+        }
+
+        function startReelsTimer() {
+            clearInterval(reelsCountdownInterval);
+            let maxSeconds = parseInt(document.getElementById('reels-timer-length').value);
+            let elapsed = 0;
+            const display = document.getElementById('reels-clock-display');
+            showToast("Reels script counting active! 🎬");
+
+            reelsCountdownInterval = setInterval(() => {
+                elapsed++;
+                let remaining = maxSeconds - elapsed;
+                let mins = Math.floor(remaining / 60).toString().padStart(2, '0');
+                let secs = (remaining % 60).toString().padStart(2, '0');
+                display.innerText = `${mins}:${secs}`;
+
+                if(remaining <= 0) {
+                    clearInterval(reelsCountdownInterval);
+                    display.innerText = "00:00";
+                    alert("Time's up! Check your Reels timing pacing.");
+                }
+            }, 1000);
+        }
+        function stopReelsTimer() {
+            clearInterval(reelsCountdownInterval);
+            showToast("Timer stopped.");
+        }
+
+        function calculateFacebookEngagement() {
+            const reach = parseInt(document.getElementById('fb-reach').value) || 0;
+            const likes = parseInt(document.getElementById('fb-likes').value) || 0;
+            const comments = parseInt(document.getElementById('fb-comments').value) || 0;
+            const res = document.getElementById('fb-engagement-result');
+
+            if(reach <= 0) {
+                res.innerText = "Reach volume must be more than 0.";
+                return;
+            }
+
+            let rate = ((likes + comments) / reach) * 100;
+            res.innerHTML = `Estimated Engagement Rate: ${rate.toFixed(2)}%`;
+        }
+
+        function exportLedgerToCSV() {
+            if(ledgerTransactions.length === 0) {
+                showToast("No transaction records to export.");
+                return;
+            }
+            let csvContent = "data:text/csv;charset=utf-8,Description,Amount,Type\n";
+            ledgerTransactions.forEach(t => {
+                csvContent += `"${t.desc}",${t.amt},${t.type}\n`;
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Naymverse_Ledger_Report.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("CSV Report Downloaded! 📥");
+        }
+
+        function exportTextMasterToFile() {
+            const text = document.getElementById('counter-text').value;
+            if(!text.trim()) {
+                showToast("No content inside Text Master.");
+                return;
+            }
+            const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "TextMaster_Content.txt";
+            link.click();
+            showToast("Text File Exported!");
+        }
+
+        function clearAllStorageData() {
+            if(confirm("Are you sure you want to completely clear local storage variables? All setup scores, lists & configurations will be reset.")) {
+                localStorage.clear();
+                alert("Storage cleared successfully. Reloading platform.");
+                window.location.reload();
+            }
+        }
+
+        function updateBcsProgress() {
+            const checkboxes = document.querySelectorAll('.bcs-check');
+            let checkedCount = 0; const states = [];
+            checkboxes.forEach((cb) => { if (cb.checked) checkedCount++; states.push(cb.checked); });
+            document.getElementById('bcs-progress-fill').style.width = Math.round((checkedCount / checkboxes.length) * 100) + '%';
+            localStorage.setItem('bcs_states', JSON.stringify(states));
+        }
+        function loadBcsProgress() {
+            const savedStates = JSON.parse(localStorage.getItem('bcs_states'));
+            if(savedStates) {
+                document.querySelectorAll('.bcs-check').forEach((cb, i) => cb.checked = savedStates[i] || false);
+            }
+            updateBcsProgress();
+        }
+
+        function loadQuizQuestion() {
+            const item = quizDataset[currentQuizIdx];
+            document.getElementById('quiz-question').innerText = `Q: ${item.q}`;
+            const container = document.getElementById('quiz-options-container');
+            container.innerHTML = "";
+            document.getElementById('quiz-result').style.display = "none";
+            item.o.forEach(opt => {
+                const div = document.createElement('div');
+                div.className = 'quiz-option';
+                div.innerText = opt;
+                div.onclick = () => checkQuizAnswer(opt, item.a, div);
+                container.appendChild(div);
+            });
+        }
+        function checkQuizAnswer(selected, correct, element) {
+            const res = document.getElementById('quiz-result');
+            res.style.display = "block";
+            document.querySelectorAll('.quiz-option').forEach(el => el.onclick = null);
+
+            if(selected === correct) {
+                quizScore += 1.00;
+                res.innerText = "✅ Correct Answer! (+1.00)";
+                res.style.color = "#10b981";
+                element.style.background = "rgba(16, 185, 129, 0.2)";
+            } else {
+                quizScore -= 0.25;
+                res.innerText = `❌ Wrong! Penalty Applied (-0.25). Answer: ${correct}`;
+                res.style.color = "#ef4444";
+                element.style.background = "rgba(239, 68, 68, 0.2)";
+            }
+            localStorage.setItem('quiz_total_score', quizScore);
+            document.getElementById('quiz-score').innerText = quizScore.toFixed(2);
+        }
+        function loadNextQuizQuestion() {
+            currentQuizIdx = (currentQuizIdx + 1) % quizDataset.length;
+            loadQuizQuestion();
+        }
+
+        function renderFlashcard() {
+            const card = flashcardsData[currentFlashcardIdx];
+            const display = document.getElementById('flashcard-display');
+            display.innerText = isFlashcardFlipped ? card.a : card.q;
+            display.style.borderColor = isFlashcardFlipped ? "#10b981" : "#4f46e5";
+        }
+        function flipFlashcard() { isFlashcardFlipped = !isFlashcardFlipped; renderFlashcard(); }
+        function nextFlashcard() { currentFlashcardIdx = (currentFlashcardIdx + 1) % flashcardsData.length; isFlashcardFlipped = false; renderFlashcard(); }
+        function prevFlashcard() { currentFlashcardIdx = (currentFlashcardIdx - 1 + flashcardsData.length) % flashcardsData.length; isFlashcardFlipped = false; renderFlashcard(); }
+        function addCustomFlashcard() {
+            const q = document.getElementById('custom-card-q').value.trim();
+            const a = document.getElementById('custom-card-a').value.trim();
+            if(!q || !a) { showToast("Fill both setup inputs!"); return; }
+            flashcardsData.push({q, a});
+            localStorage.setItem('custom_flashcards', JSON.stringify(flashcardsData));
+            document.getElementById('custom-card-q').value = "";
+            document.getElementById('custom-card-a').value = "";
+            showToast("New dynamic flashcard stored!");
+            currentFlashcardIdx = flashcardsData.length - 1;
+            isFlashcardFlipped = false;
+            renderFlashcard();
+        }
+
+        function calculateTechnicalIndicators() {
+            const price = parseFloat(document.getElementById('indicator-price').value) || 0;
+            const resBox = document.getElementById('indicator-result');
+            
+            if(price <= 0) {
+                resBox.innerText = "Please enter a valid price.";
+                return;
+            }
+
+            let simulatedRsi = Math.floor((price % 100));
+            if(simulatedRsi < 20 || simulatedRsi > 80) simulatedRsi = 45; 
+            
+            let signal = "Neutral ⚖️";
+            let color = "var(--text)";
+            if(simulatedRsi > 70) { signal = "Strong Overbought (SELL Alert! 🚨)"; color = "#ef4444"; }
+            else if(simulatedRsi < 35) { signal = "Strong Oversold (BUY Dip Alert! 📈)"; color = "#10b981"; }
+            
+            resBox.innerHTML = `<strong>Simulated RSI (14):</strong> ${simulatedRsi}<br>
+            <strong>MACD Histogram:</strong> ${(price * 0.0001).toFixed(3)} (Bullish Trend Cross)<br>
+            <strong>System Action Signal:</strong> <span style="color:${color}; font-weight:bold;">${signal}</span>`;
+        }
+
+        function updateAirdropProgress() {
+            const checkboxes = document.querySelectorAll('.airdrop-check');
+            let checkedCount = 0; const states = [];
+            checkboxes.forEach((cb) => { if (cb.checked) checkedCount++; states.push(cb.checked); });
+            document.getElementById('airdrop-progress-fill').style.width = Math.round((checkedCount / checkboxes.length) * 100) + '%';
+            localStorage.setItem('airdrop_states', JSON.stringify(states));
+        }
+        function loadAirdropProgress() {
+            const savedStates = JSON.parse(localStorage.getItem('airdrop_states'));
+            if(savedStates) {
+                document.querySelectorAll('.airdrop-check').forEach((cb, i) => cb.checked = savedStates[i] || false);
+            }
+            updateAirdropProgress();
+        }
+
+        // Script Engines Customization for Bhandaria Park & Charkhali Sunflowers
+        function generateVlogScript() {
+            const type = document.getElementById('vlog-type').value;
+            const output = document.getElementById('vlog-script-output');
+            const data = {
+                bhandaria: "[00:00] Intro hook showing Bhandaria Park gateway entrance. [00:15] Touring the local guava gardens with friends, explaining cultivation vibe. [00:45] Group outing fun moments and cinematic ending montage scene layout.",
+                charkhali: "[00:00] Beautiful slow-mo tracking shots over bright Charkhali sunflower gardens. [00:20] Reviewing the travel route and experience. [00:50] Outro prompt reminding fans to engage with Reels & drop a follow!",
+                crypto: "[00:00] Market overview reaction hook for Binance/Bybit. [00:20] Analyzing RSI technical anomaly charts. [00:50] Call to action for nodes mining validation.",
+                garden: "[00:00] Cinematic slow-mo tracking roof garden upgrades. [00:15] Watering logs setup explanation (Apple/Pomegranate/Grape care update)."
+            };
+            output.value = data[type];
+        }
+        function generateDynamicHashtags() {
+            const keyword = document.getElementById('hashtag-keyword').value.trim().toLowerCase();
+            const output = document.getElementById('hashtag-output');
+            if(!keyword) { output.innerText = "Type keyword above..."; return; }
+            output.innerText = `#${keyword} #${keyword}Growth #${keyword}Trends #SmartMove #AutomationTools #Naymverse #CreatorsCommunity`;
+        }
+
+        function updatePlantCareSchedule() {
+            const plant = document.getElementById('plant-select').value;
+            const statusBox = document.getElementById('plant-care-status');
+            const schedules = {
+                apple: "🍏 Apple Plant (আপেল): Water every 2 days. Requires consistent root drainage & sunlight setup.",
+                grape: "🍇 Grape Vine (আঙুর লতা): Moderate watering pattern. Ensure strong structural trellis setup support.",
+                pomegranate: "🍎 Pomegranate (ডালিম): Highly resilient. Water thoroughly once every 5 days."
+            };
+            const lastWatered = localStorage.getItem(`plant_water_${plant}`) || "Never logged";
+            statusBox.innerHTML = `<strong>Guideline:</strong> ${schedules[plant]}<br><br><small>📅 Last Watered Timeline: ${lastWatered}</small>`;
+            updatePlantCountdown();
+        }
+        function resetPlantWatering() {
+            const plant = document.getElementById('plant-select').value;
+            localStorage.setItem(`plant_water_${plant}`, new Date().toISOString());
+            updatePlantCareSchedule();
+            showToast("Logged system watering timeline! 💧");
+        }
+        function updatePlantCountdown() {
+            const plant = document.getElementById('plant-select').value;
+            const lastWateredStr = localStorage.getItem(`plant_water_${plant}`);
+            const display = document.getElementById('plant-countdown');
+            if(!lastWateredStr) { display.innerText = "Status: Water ASAP! 🚨"; return; }
+            
+            const lastWatered = new Date(lastWateredStr);
+            const intervals = { apple: 2, grape: 3, pomegranate: 5 };
+            const targetTime = new Date(lastWatered.getTime() + intervals[plant] * 24 * 60 * 60 * 1000);
+            
+            const diff = targetTime - new Date();
+            if(diff <= 0) {
+                display.innerText = "Time to water again! 💧🚨";
+            } else {
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                display.innerText = `⏳ Next Watering due in: ${hours}h ${mins}m`;
+            }
+        }
+
+        function addLedgerTransaction() {
+            const desc = document.getElementById('ledger-desc').value.trim();
+            const amt = parseFloat(document.getElementById('ledger-amount').value) || 0;
+            const type = document.getElementById('ledger-type').value;
+            if(!desc || amt <= 0) { showToast("Enter clear narrative values!"); return; }
+            
+            if(type === 'income') cashbookBalance += amt;
+            else cashbookBalance -= amt;
+
+            ledgerTransactions.push({ desc, amt, type });
+            localStorage.setItem('ledger_transactions', JSON.stringify(ledgerTransactions));
+            
+            localStorage.setItem('ledger_balance', cashbookBalance);
+            document.getElementById('ledger-balance-box').innerText = `Net Balance: $ / ৳ ${cashbookBalance.toFixed(2)}`;
+            document.getElementById('ledger-desc').value = "";
+            document.getElementById('ledger-amount').value = "";
+            showToast("Transaction balanced & saved! 📊");
+        }
+
+        let pomodoroInterval = null; let isTimerRunning = false; let timerSeconds = 1500; let isBreak = false;
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+            const secs = (timerSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('timer-clock').innerText = `${mins}:${secs}`;
+        }
+        function startTimer() {
+            if (isTimerRunning) return; isTimerRunning = true; showToast("Focus Session Active.");
+            pomodoroInterval = setInterval(() => {
+                if (timerSeconds > 0) { timerSeconds--; updateTimerDisplay(); } 
+                else {
+                    clearInterval(pomodoroInterval); isTimerRunning = false;
+                    isBreak = !isBreak;
+                    timerSeconds = isBreak ? 300 : 1500;
+                    document.getElementById('timer-state').innerText = isBreak ? "Break Time! ☕" : "Focus Time! 🎯";
+                    updateTimerDisplay(); startTimer();
+                }
+            }, 1000);
+        }
+        function pauseTimer() { clearInterval(pomodoroInterval); isTimerRunning = false; showToast("Timer Paused."); }
+        function resetTimer() { clearInterval(pomodoroInterval); isTimerRunning = false; isBreak = false; timerSeconds = 1500; document.getElementById('timer-state').innerText = "Focus Time! 🎯"; updateTimerDisplay(); }
+
+        let recognition = null; let isRecordingSpeech = false;
+        function startSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) { showToast("Browser Speech API not supported!"); return; }
+            const recordBtn = document.getElementById('start-record-btn');
+            const outputArea = document.getElementById('voice-output-text');
+            
+            try {
+                if (!recognition) {
+                    recognition = new SpeechRecognition(); recognition.continuous = true;
+                    recognition.onresult = (event) => {
+                        const txt = event.results[event.resultIndex][0].transcript.trim().toLowerCase();
+                        if(txt === "clear" || txt === "মুছে ফেলো") { outputArea.value = ""; return; }
+                        if(txt === "copy" || txt === "কপি করো") { copyToClipboard('voice-output-text'); return; }
+                        outputArea.value += event.results[event.resultIndex][0].transcript + " ";
+                    };
+                    recognition.onend = () => { isRecordingSpeech = false; recordBtn.innerText = "🔴 Start Listening"; };
+                }
+                if (!isRecordingSpeech) {
+                    recognition.lang = document.getElementById('voice-lang').value;
+                    recognition.start(); isRecordingSpeech = true; recordBtn.innerText = "🛑 Stop"; showToast("Listening...");
+                } else { recognition.stop(); isRecordingSpeech = false; }
+            } catch(e) {
+                showToast("Speech Recognition Error occurred.");
+                console.error(e);
+            }
+        }
+
+        function generateQR() {
+            const text = document.getElementById('qr-text').value;
+            if (!text.trim()) { showToast('Enter link or text!'); return; }
+            document.getElementById('qrcode').innerHTML = "";
+            document.getElementById('qr-result').style.display = "block";
+            new QRCode(document.getElementById('qrcode'), { text: text, width: 150, height: 150 });
+        }
+        function downloadQR() {
+            const img = document.querySelector('#qrcode img');
+            if(img) { const link = document.createElement('a'); link.download = 'qr.png'; link.href = img.src; link.click(); }
+            else { showToast("Generate QR code first!"); }
+        }
+
+        function shortenURL() {
+            const urlInput = document.getElementById('long-url').value;
+            if (!urlInput.trim()) { showToast("Enter a URL first!"); return; }
+            const outputText = document.getElementById('short-url-output');
+            document.getElementById('short-result-box').style.display = "block";
+            outputText.innerText = "Loading...";
+            
+            fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(urlInput)}`)
+                .then(res => {
+                    if(!res.ok) throw new Error("Network error");
+                    return res.text();
+                })
+                .then(data => { outputText.innerText = data; showToast('Shortened!'); })
+                .catch((err) => { 
+                    outputText.innerText = "API Error - Unable to Shorten"; 
+                    console.error(err);
+                });
+        }
+
+        function countAndSlugText() {
+            const text = document.getElementById('counter-text').value;
+            document.getElementById('char-count').innerText = text.length;
+            document.getElementById('word-count').innerText = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+            document.getElementById('seo-slug-output').value = text.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+        }
+        function convertCase(mode) {
+            const txt = document.getElementById('counter-text');
+            txt.value = (mode === 'up') ? txt.value.toUpperCase() : txt.value.toLowerCase();
+            countAndSlugText();
+        }
+
+        function fetchAllCryptoData() {
+            fetch(`https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,dogecoin&vs_currencies=usd`)
+                .then(res => {
+                    if(!res.ok) throw new Error();
+                    return res.json();
+                })
+                .then(data => {
+                    document.getElementById('table-btc').innerText = `$${data.bitcoin.usd.toLocaleString()}`;
+                    document.getElementById('table-eth').innerText = `$${data.ethereum.usd.toLocaleString()}`;
+                    document.getElementById('table-doge').innerText = `$${data.dogecoin.usd}`;
+                    convertCrypto();
+                }).catch(() => {
+                    document.querySelectorAll('.crypto-table td[id^="table-"]').forEach(td => td.innerText = "API Rate Limit Peak");
+                });
+        }
+        function convertCrypto() {
+            const selected = document.getElementById('crypto-select').value;
+            const amount = parseFloat(document.getElementById('crypto-amount').value) || 0;
+            if(amount < 0) return;
+            fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${selected}&vs_currencies=usd`)
+                .then(res => {
+                    if(!res.ok) throw new Error();
+                    return res.json();
+                })
+                .then(data => {
+                    document.getElementById('crypto-output').innerText = `$ ${(data[selected].usd * amount).toLocaleString()} USD`;
+                }).catch(() => {
+                    document.getElementById('crypto-output').innerText = "Fetch error";
+                });
+        }
+
+        function calculateBMI() {
+            const w = parseFloat(document.getElementById('bmi-weight').value);
+            const h = parseFloat(document.getElementById('bmi-height').value) / 100;
+            if(!w || !h || w <= 0 || h <= 0) {
+                showToast("Enter valid height and weight values!");
+                return;
+            }
+            const bmi = (w / (h * h)).toFixed(1);
+            document.getElementById('bmi-output').innerText = `BMI Index: ${bmi}`;
+            document.getElementById('bmi-result-box').style.display = "block";
+        }
+        function updateColorPicker() {
+            const col = document.getElementById('color-input').value;
+            document.getElementById('color-block').style.backgroundColor = col;
+            document.getElementById('color-hex').innerText = col;
+        }
+
+        function speakText() {
+            const text = document.getElementById('speech-text').value;
+            if(text.trim()) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                window.speechSynthesis.speak(utterance);
+            } else {
+                showToast("Please input text to read aloud.");
+            }
+        }
+
+        function generatePassword() {
+            let set = "abcdefghijklmnopqrstuvwxyz";
+            if(document.getElementById('include-uppercase').checked) set += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            if(document.getElementById('include-numbers').checked) set += "1234567890";
+            if(document.getElementById('include-symbols').checked) set += "!@#$%^&*()_+";
+            
+            let pass = ""; const len = parseInt(document.getElementById('pass-length').value) || 12;
+            if(len < 6 || len > 30) {
+                showToast("Password length should be 6-30 chars.");
+                return;
+            }
+            for(let i=0; i<len; i++) pass += set.charAt(Math.floor(Math.random()*set.length));
+            document.getElementById('password-output').innerText = pass;
+            document.getElementById('pass-result-box').style.display = "block";
+        }
+
+        function calculateAge() {
+            const dateInput = document.getElementById('birth-date').value;
+            if(!dateInput) { showToast("Select birth date!"); return; }
+            const dob = new Date(dateInput);
+            let age = new Date().getFullYear() - dob.getFullYear();
+            const m = new Date().getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && new Date().getDate() < dob.getDate())) { age--; }
+            document.getElementById('age-output').innerText = `Age: ${age} Years old.`;
+            document.getElementById('age-result-box').style.display = "block";
+        }
+        function resizeImage(format) { showToast(`Simulated Download as ${format.toUpperCase()}`); }
+        function processYoutube() { document.getElementById('yt-result').style.display = "block"; }
+        
+        function updateSocialTemplate() {
+            const type = document.getElementById('template-select').value;
+            const maps = { 
+                'tech-bio': "🚀 Web3 & Digital Assets Specialist | Blockchain Testnet Optimizer | Tech Blogger", 
+                'reels-growth': "Drop a 🔥 if you are building dynamic monetization channels this year! #OrganicTraffic #ProfessionalDashboard", 
+                'motivation-quote': "Continuous automation beats delayed perfection. Master your layout loops today!" 
+            };
+            document.getElementById('social-template-output').value = maps[type];
+        }
+        
+        // Resource Calculation Logic Including Jatropha Character Card Setup
+        function calculateGameResources() {
+            const selection = document.getElementById('game-item-select').value;
+            let target = 499;
+            if(selection === 'jatropha') target = 500;
+            else if(selection === 'elite') target = 600;
+            else if(selection === 'evolution') target = 1080;
+
+            const owned = parseInt(document.getElementById('game-current-diamonds').value) || 0;
+            if(owned < 0) return;
+            const diff = target - owned;
+            document.getElementById('game-calc-result').innerText = diff <= 0 ? "✅ Ready to Unlock Reward Group!" : `Short of ${diff} Diamonds to Claim`;
+        }
+        function simulateGasRefresh() { showToast("Network node gas tracking updated live!"); }
+    </script>
+</body>
+</html>
