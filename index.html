@@ -1624,7 +1624,28 @@
             const diff = target - owned;
             document.getElementById('game-calc-result').innerText = diff <= 0 ? "✅ Ready to Unlock Reward Group!" : `Short of ${diff} Diamonds to Claim`;
         }
-        function simulateGasRefresh() { showToast("Network node gas tracking updated live!"); }
+        function simulateGasRefresh() { showToast("Network node gas tracking updated live!"); }function simulateGasRefresh() { 
+    showToast("Network node gas tracking updated live!"); 
+}function generateVlogScript() {
+    const topic = document.getElementById('vlog-topic').value;
+    const script = `ভিডিও আইডিয়া: "${topic}" নিয়ে একটি দারুণ ভ্লগ তৈরি করুন!`;
+    document.getElementById('script-output').innerText = script;
+}
+
+function checkNodeStatus() {
+    const status = Math.random() > 0.3 ? "🟢 Online" : "🔴 Offline";
+    document.getElementById('node-status').innerText = `Xenea Node Status: ${status}`;
+}
+
     </script>
+    <div class="tool-section">
+    <h3>🤖 My New Automation Tools</h3>
+    <input type="text" id="vlog-topic" placeholder="ভিডিওর বিষয় লিখুন">
+    <button onclick="generateVlogScript()">Generate Script</button>
+    <p id="script-output" style="color: white; margin-top: 10px;"></p>
+    <button onclick="checkNodeStatus()" style="margin-top: 15px;">Check Node Status</button>
+    <p id="node-status" style="color: white; margin-top: 10px;"></p>
+</div>
+
 </body>
 </html>
