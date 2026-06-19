@@ -1646,6 +1646,119 @@ function checkNodeStatus() {
     <button onclick="checkNodeStatus()" style="margin-top: 15px;">Check Node Status</button>
     <p id="node-status" style="color: white; margin-top: 10px;"></p>
 </div>
+<!-- নতুন ফিচার সেকশন -->
+<div class="tool-section" style="margin-top: 20px;">
+    <h3>📈 Quick Productivity Tools</h3>
+    
+    <!-- ইনপুট ফিল্ড -->
+    <input type="number" id="roi-input" placeholder="ইনভেস্টমেন্ট অ্যামাউন্ট লিখুন">
+    <button onclick="calculateROI()">Calculate ROI</button>
+    <p id="roi-result" style="color: yellow;"></p>
+
+    <!-- কাউন্টডাউন টাইমার টাইপ বাটন -->
+    <button onclick="showDate()" style="background: #ff5722;">Check Today's Date</button>
+    <p id="date-output" style="margin-top: 10px;"></p>
+</div>
+
+<script>
+    function calculateROI() {
+        const amount = document.getElementById('roi-input').value;
+        const result = amount * 0.15; // উদাহরণস্বরূপ ১৫% রিটার্ন
+        document.getElementById('roi-result').innerText = `সম্ভাব্য লাভ: ${result}`;
+    }
+
+    function showDate() {
+        const today = new Date().toLocaleDateString();
+        document.getElementById('date-output').innerText = `আজকের তারিখ: ${today}`;
+    }
+</script>
+<!-- নতুন ফিচার সেকশন -->
+<div class="tool-section" style="margin-top: 20px;">
+    <h3>🚀 Naym Digital Assets Tools</h3>
+
+    <!-- ক্রিপ্টো প্রফিট ক্যালকুলেটর -->
+    <label>Investment Amount ($):</label>
+    <input type="number" id="crypto-amount" placeholder="মূলধন লিখুন">
+    <label>Expected Growth (%):</label>
+    <input type="number" id="growth-percent" placeholder="বৃদ্ধির হার (%)">
+    <button onclick="calculateCrypto()">Calculate Profit</button>
+    <p id="crypto-result" style="color: #00d4ff; margin-top: 10px;"></p>
+
+    <hr style="border: 0; border-top: 1px solid #333; margin: 15px 0;">
+
+    <!-- কুইক লিঙ্ক -->
+    <h3>🔗 Quick Links</h3>
+    <button onclick="window.open('https://facebook.com', '_blank')" style="background: #4267B2;">Visit Facebook</button>
+    <button onclick="window.open('https://github.com/Nayembepary', '_blank')" style="background: #333;">Visit GitHub</button>
+</div>
+<div class="tool-section" style="margin-top: 20px;">
+    <h3>⚙️ Extra Utilities</h3>
+    
+    <!-- গ্রিটিং মেসেজ -->
+    <button onclick="showGreeting()" style="background: #e91e63;">Get Greeting</button>
+    <p id="greeting-output" style="margin-top: 10px;"></p>
+
+    <!-- ডার্ক মোড টগল -->
+    <button onclick="toggleTheme()" style="background: #9c27b0;">Toggle Theme</button>
+</div>
+
+<script>
+    // ক্রিপ্টো প্রফিট ক্যালকুলেটর ফাংশন
+    // ডাইনামিক গ্রিটিং ফাংশন
+function showGreeting() {
+    const hour = new Date().getHours();
+    let message = hour < 12 ? "শুভ সকাল!" : (hour < 18 ? "শুভ দুপুর!" : "শুভ সন্ধ্যা!");
+    document.getElementById('greeting-output').innerText = message;
+}
+
+// থিম টগল ফাংশন
+function toggleTheme() {
+    document.body.style.backgroundColor = document.body.style.backgroundColor === 'white' ? '#121212' : 'white';
+    document.body.style.color = document.body.style.color === 'black' ? 'white' : 'black';
+}
+
+    function calculateCrypto() {
+        const amount = document.getElementById('crypto-amount').value;
+        const growth = document.getElementById('growth-percent').value;
+        const profit = (amount * growth) / 100;
+        document.getElementById('crypto-result').innerText = `সম্ভাব্য প্রফিট: $${profit.toFixed(2)}`;
+    }
+    // Reading Progress Bar Script
+window.onscroll = function() {
+    let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    let scrolled = (winScroll / height) * 100;
+    document.getElementById("progress-bar").style.width = scrolled + "%";
+};
+
+</script>
+
+<!-- Back to Top Button -->
+<button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
+        style="position: fixed; bottom: 20px; right: 20px; background: #ff5722; border: none; padding: 10px; border-radius: 5px; cursor: pointer; color: white;">
+    ⬆️ Top
+</button>
+
+<footer style="text-align: center; margin-top: 40px; padding: 20px; font-size: 12px; color: #888;">
+    <p>© 2026 Naym Digital Assets. All rights reserved.</p>
+</footer>
+    <!-- Reading Progress Bar -->
+<div id="progress-container" style="position: fixed; top: 0; left: 0; width: 100%; height: 5px; background: #333; z-index: 999;">
+    <div id="progress-bar" style="height: 100%; background: #ff5722; width: 0%;"></div>
+</div>
+
+<style>
+    /* সকল বাটনের জন্য কমন হোভার ইফেক্ট */
+    button {
+        transition: all 0.3s ease; /* স্মুথ ট্রানজিশন */
+    }
+
+    button:hover {
+        transform: scale(1.05); /* মাউস নিলে বাটন সামান্য বড় হবে */
+        filter: brightness(1.2); /* মাউস নিলে রঙ উজ্জ্বল হবে */
+        cursor: pointer;
+    }
+</style>
 
 </body>
 </html>
