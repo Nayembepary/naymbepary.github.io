@@ -1762,12 +1762,23 @@ window.onscroll = function() {
     </form>
 </div>
 
+    <div class="card" id="productivity-tool" data-category="utility">
+    <h2>🔐 সিকিউরিটি ও নোটস</h2>
+    <div style="margin-bottom: 20px;">
+        <button onclick="generatePassword()" style="background: #607d8b;">পাসওয়ার্ড তৈরি করুন</button>
+        <p id="password-display" style="word-break: break-all; font-weight: bold;"></p>
+    </div>
+    <div class="notepad-section">
+        <textarea id="my-notes" placeholder="এখানে দ্রুত নোট লিখুন..." style="width: 100%; height: 80px;"></textarea>
+        <button onclick="saveNotes()" style="background: #ff9800;">নোট সেভ করুন</button>
+    </div>
+</div>
+
 </footer>
     <!-- Reading Progress Bar -->
 <div id="progress-container" style="position: fixed; top: 0; left: 0; width: 100%; height: 5px; background: #333; z-index: 999;">
     <div id="progress-bar" style="height: 100%; background: #ff5722; width: 0%;"></div>
-</div>
-
+    
 <style>
     /* সকল বাটনের জন্য কমন হোভার ইফেক্ট */
     button {
@@ -1779,7 +1790,32 @@ window.onscroll = function() {
         filter: brightness(1.2); /* মাউস নিলে রঙ উজ্জ্বল হবে */
         cursor: pointer;
     }
-</style>
+    </style>
+<script>
+// পাসওয়ার্ড জেনারেটর
+function generatePassword() {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+    let password = "";
+    for (let i = 0; i < 12; i++) {
+        password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    document.getElementById('password-display').innerText = password;
+}
+
+// নোট সেভ করার ফাংশন
+function saveNotes() {
+    const note = document.getElementById('my-notes').value;
+    localStorage.setItem('naymNotes', note);
+    alert('নোট সেভ হয়েছে!');
+}
+
+// পেজ লোড হলে নোট দেখানো
+window.onload = () => {
+    document.getElementById('my-notes').value = localStorage.getItem('naymNotes') || "";
+};
+</script>
+
+
 
 </body>
 </html>
